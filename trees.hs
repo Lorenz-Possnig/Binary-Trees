@@ -11,7 +11,7 @@ This library contains the Tree type representing binary search trees
 module BinaryTrees where
 
 data Tree a = EmptyTree
-    | Node (Tree a) a (Tree a)
+    | Node (Tree a) {-# UNPACK #-} !a (Tree a)
     deriving (Show, Eq, Read)
 
 --Creates a tree consisting of one value and two empty subtrees
@@ -62,20 +62,20 @@ treeSortBy func list = toList $ fromListBy func list
 map :: (a -> b) -> Tree a -> Tree b
 map func EmptyTree = EmptyTree
 map func (Node EmptyTree key EmptyTree) = Node EmptyTree (func key) EmptyTree
-map func (Node left key right) = Node (MyTrees.map func left) (func key) (MyTrees.map func right)
+map func (Node left key right) = Node (BinaryTrees.map func left) (func key) (BinaryTrees.map func right)
 
 --like fold but with trees
 fold :: (a -> b -> b) -> b -> Tree a -> b
 fold func def EmptyTree = def
-fold func def (Node left key right) = func key (MyTrees.fold func (MyTrees.fold func def left) right)
+fold func def (Node left key right) = func key (BinaryTrees.fold func (BinaryTrees.fold func def left) right)
 
 --Returns true if val is an element of the tree
 elem :: (Ord a) => a -> Tree a -> Bool
 elem val EmptyTree = False
 elem val (Node left key right)
     |val == key = True
-    |val < key = MyTrees.elem val left
-    |otherwise = MyTrees.elem val right
+    |val < key = BinaryTrees.elem val left
+    |otherwise = BinaryTrees.elem val right
 
 --Returns the height of a tree
 height :: Tree a -> Int
