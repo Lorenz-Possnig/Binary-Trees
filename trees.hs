@@ -119,7 +119,3 @@ drawTree = unlines . draw where
         drawSubTrees [a] = "|" : shift "+- " "   " (draw a)
         drawSubTrees (h:t) = "|" : shift "`- " "|  " (draw h) ++ drawSubTrees t
     shift first other = zipWith (++) (first : repeat other)
-
-main = do
-    let tree = fromList [7,41,5,96,52,965,541,65,11,63,56,85,46,651,96,498,4]
-    putStr . drawTree $ BinaryTrees.map (show) tree 
