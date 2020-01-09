@@ -11,7 +11,9 @@ This library contains the Tree type representing binary search trees
 module BinaryTrees where
 
 data Tree a = EmptyTree
-    | Node (Tree a) {-# UNPACK #-} !a (Tree a)
+    | Node {-# UNPACK #-} !(Tree a)
+           {-# UNPACK #-} !a
+           {-# UNPACK #-} !(Tree a)
     deriving (Show, Eq, Read)
 
 --Creates a tree consisting of one value and two empty subtrees
@@ -114,6 +116,10 @@ drawTree = unlines . draw where
     draw (Node left key right) = lines key ++ drawSubTrees (left:[right]) where
         drawSubTrees :: [Tree String] -> [String]
         drawSubTrees [] = []
-        drawSubTrees [a] = "|" : shift "`- " "   " (draw a)
-        drawSubTrees (h:t) = "|" : shift "+- " "|  " (draw h) ++ drawSubTrees t
+        drawSubTrees [a] = "|" : shift "+- " "   " (draw a)
+        drawSubTrees (h:t) = "|" : shift "`- " "|  " (draw h) ++ drawSubTrees t
     shift first other = zipWith (++) (first : repeat other)
+
+main = do
+    let tree = fromList [7,41,5,96,52,965,541,65,11,63,56,85,46,651,96,498,4]
+    putStr . drawTree $ BinaryTrees.map (show) tree 
